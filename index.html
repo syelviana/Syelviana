@@ -2,10 +2,176 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Website Ujian Saya</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sistem Data Mahasiswa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Halo, ini website saya!</h1>
-    <p>Website untuk ujian Junior Web Programmer</p>
+
+<nav class="navbar navbar-dark bg-primary">
+  <div class="container">
+    <span class="navbar-brand">Sistem Mahasiswa</span>
+  </div>
+</nav>
+
+<div class="container mt-4">
+    <h3>Data Mahasiswa</h3>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <input type="hidden" id="index">
+
+            <div class="row g-2">
+                <div class="col-md-4">
+                    <input type="text" id="nama" class="form-control" placeholder="Nama">
+                </div>
+                <div class="col-md-2">
+                    <input type="text" id="nim" class="form-control" placeholder="NIM">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" id="jurusan" class="form-control" placeholder="Jurusan">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" id="prodi" class="form-control" placeholder="Prodi">
+                </div>
+                <div class="col-md-3 mt-2">
+                    <input type="text" id="kelas" class="form-control" placeholder="Kelas">
+                </div>
+                <div class="col-md-3 mt-2">
+                    <button id="btnSimpan" class="btn btn-success w-100" onclick="simpan()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>NIM</th>
+                <th>Jurusan</th>
+                <th>Prodi</th>
+                <th>Kelas</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="tabelData"></tbody>
+    </table>
+</div>
+
+<footer class="bg-dark text-white text-center p-3 mt-4">
+    <p>&copy; 2026 Sistem Informasi Mahasiswa</p>
+</footer>
+
+<script>
+// DATA AWAL
+let dataMahasiswa = [
+    {
+        nama: "Syelviana Meisyaroh",
+        nim: "236201037",
+        jurusan: "Teknologi Informasi",
+        prodi: "D3 Teknik Komputer",
+        kelas: "6B TK"
+    }
+];
+
+// TAMPILKAN DATA
+function tampilkanData() {
+    let tabel = document.getElementById("tabelData");
+    tabel.innerHTML = "";
+
+    dataMahasiswa.forEach((mhs, index) => {
+        tabel.innerHTML += `
+        <tr>
+            <td>${index + 1}</td>
+            <td>${mhs.nama}</td>
+            <td>${mhs.nim}</td>
+            <td>${mhs.jurusan}</td>
+            <td>${mhs.prodi}</td>
+            <td>${mhs.kelas}</td>
+            <td>
+                <button class="btn btn-warning btn-sm" onclick="edit(${index})">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="hapus(${index})">Hapus</button>
+            </td>
+        </tr>
+        `;
+    });
+}
+
+// SIMPAN DATA
+function simpan() {
+    let index = document.getElementById("index").value;
+    index = index === "" ? "" : Number(index);
+
+    let mhs = {
+        nama: document.getElementById("nama").value.trim(),
+        nim: document.getElementById("nim").value.trim(),
+        jurusan: document.getElementById("jurusan").value.trim(),
+        prodi: document.getElementById("prodi").value.trim(),
+        kelas: document.getElementById("kelas").value.trim()
+    };
+
+    // VALIDASI
+    if (!mhs.nama || !mhs.nim || !mhs.jurusan || !mhs.prodi || !mhs.kelas) {
+        alert("Semua data harus diisi!");
+        return;
+    }
+
+    if (index === "") {
+        dataMahasiswa.push(mhs);
+        alert("Data berhasil ditambahkan!");
+    } else {
+        dataMahasiswa[index] = mhs;
+        alert("Data berhasil diupdate!");
+    }
+
+    resetForm();
+    tampilkanData();
+}
+
+// EDIT DATA
+function edit(i) {
+    let mhs = dataMahasiswa[i];
+    if (!mhs) return;
+
+    document.getElementById("index").value = i;
+    document.getElementById("nama").value = mhs.nama;
+    document.getElementById("nim").value = mhs.nim;
+    document.getElementById("jurusan").value = mhs.jurusan;
+    document.getElementById("prodi").value = mhs.prodi;
+    document.getElementById("kelas").value = mhs.kelas;
+
+    document.getElementById("btnSimpan").innerText = "Update";
+}
+
+// HAPUS DATA
+function hapus(i) {
+    if (confirm("Yakin ingin menghapus data?")) {
+        dataMahasiswa.splice(i, 1);
+        tampilkanData();
+        alert("Data berhasil dihapus!");
+    }
+}
+
+// RESET FORM
+function resetForm() {
+    document.getElementById("index").value = "";
+    document.getElementById("nama").value = "";
+    document.getElementById("nim").value = "";
+    document.getElementById("jurusan").value = "";
+    document.getElementById("prodi").value = "";
+    document.getElementById("kelas").value = "";
+    document.getElementById("btnSimpan").innerText = "Simpan";
+}
+
+// LOAD AWAL
+window.onload = function() {
+    tampilkanData();
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
